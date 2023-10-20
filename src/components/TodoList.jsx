@@ -1,28 +1,15 @@
 // src/components/TodoList.js
 
 import React, { useState } from 'react';
+import useTasks from './useTasks';
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
+  const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
   const [todo, setTodo] = useState('');
 
   const handleAddTodo = () => {
-    if (todo) {
-      setTodos([...todos, { task: todo, completed: false }]);
-      setTodo('');
-    }
-  };
-
-  const handleDeleteTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
-  };
-
-  const handleToggleComplete = (index) => {
-    const newTodos = [...todos];
-    newTodos[index].completed = !newTodos[index].completed;
-    setTodos(newTodos);
+    addTask(todo);
+    setTodo('');
   };
 
   return (
@@ -35,7 +22,7 @@ const TodoList = () => {
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
             className="flex-1 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Add a task"
+            placeholder="Ajouter une tâche"
           />
           <button
             onClick={handleAddTodo}
@@ -45,22 +32,22 @@ const TodoList = () => {
           </button>
         </div>
         <ul>
-          {todos.map((todo, index) => (
+          {tasks.map((task, index) => (
             <li key={index} className="py-1">
-              <div className={`flex justify-between items-center bg-gray-100 rounded-md p-2 mb-2 ${todo.completed ? 'line-through' : ''}`}>
-                <span onClick={() => handleToggleComplete(index)}>{todo.task}</span>
+              <div className={`flex justify-between items-center bg-gray-100 rounded-md p-2 mb-2 ${task.completed ? 'line-through' : ''}`}>
+                <span onClick={() => toggleComplete(index)}>{task.task}</span>
                 <div>
                   <button
-                    onClick={() => handleDeleteTodo(index)}
+                    onClick={() => deleteTask(index)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
                   >
                     Supprimer
                   </button>
                   <button
-                    onClick={() => handleToggleComplete(index)}
+                    onClick={() => toggleComplete(index)}
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
                   >
-                    {todo.completed ? 'Rétablir' : 'Terminer'}
+                    {task.completed ? 'Rétablir' : 'Terminer'}
                   </button>
                 </div>
               </div>
