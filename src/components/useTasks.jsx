@@ -1,10 +1,15 @@
 // src/components/useTasks.js
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 const useTasks = () => {
-  const [tasks, setTasks] = useState([]);
+  const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  const [tasks, setTasks] = useState(storedTasks);
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = (task) => {
     if (task) {
