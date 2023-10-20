@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import useTasks from './useTasks';
 
 const TodoList = () => {
-  const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
+  const { tasks, addTask, deleteTask, toggleComplete, filter, setFilter } = useTasks();
   const [todo, setTodo] = useState('');
 
   const handleAddTodo = () => {
@@ -30,6 +30,11 @@ const TodoList = () => {
           >
             Ajouter
           </button>
+        </div>
+        <div className="flex justify-center mb-4">
+          <button onClick={() => setFilter('all')} className={`mx-2 ${filter === 'all' ? 'font-bold' : ''}`}>Toutes</button>
+          <button onClick={() => setFilter('completed')} className={`mx-2 ${filter === 'completed' ? 'font-bold' : ''}`}>Terminées</button>
+          <button onClick={() => setFilter('uncompleted')} className={`mx-2 ${filter === 'uncompleted' ? 'font-bold' : ''}`}>En cours</button>
         </div>
         <ul>
           {tasks.map((task, index) => (
