@@ -1,6 +1,6 @@
 // src/components/useTasks.js
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 
 const useTasks = () => {
   const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -11,23 +11,27 @@ const useTasks = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (task) => {
+  const addTask = useCallback((task) => {
     if (task) {
-      setTasks([...tasks, { task, completed: false }]);
+      setTasks(prevTasks => [...prevTasks, { task, completed: false }]);
     }
-  };
+  }, []);
 
-  const deleteTask = (index) => {
-    const newTasks = [...tasks];
-    newTasks.splice(index, 1);
-    setTasks(newTasks);
-  };
+  const deleteTask = useCallback((index) => {
+    setTasks(prevTasks => {
+      const newTasks = [...prevTasks];
+      newTasks.splice(index, 1);
+      return newTasks;
+    });
+  }, []);
 
-  const toggleComplete = (index) => {
-    const newTasks = [...tasks];
-    newTasks[index].completed = !newTasks[index].completed;
-    setTasks(newTasks);
-  };
+  const toggleComplete = useCallback((index) => {
+    setTasks(prevTasks => {
+      const newTasks = [...prevTasks];
+      newTasks[index] = { ...newTasks[index], completed: !newTasks[index].completed };
+      return newTasks;
+    });
+  }, []);
 
   const filteredTasks = useMemo(() => {
     if (filter === 'all') return tasks;

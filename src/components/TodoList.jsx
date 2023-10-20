@@ -14,7 +14,7 @@ const TodoList = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
+      <div className="max-w-md w-full p-6 bg-gray-700 rounded-md shadow-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Todo List</h1>
         <div className="flex mb-4">
           <input
