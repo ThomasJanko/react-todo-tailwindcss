@@ -8,13 +8,20 @@ const TodoList = () => {
 
   const handleAddTodo = () => {
     if (todo) {
-      setTodos([...todos, todo]);
+      setTodos([...todos, { task: todo, completed: false }]);
       setTodo('');
     }
   };
 
   const handleDeleteTodo = (index) => {
-    const newTodos = todos.filter((_, todoIndex) => todoIndex !== index);
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+  const handleToggleComplete = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
     setTodos(newTodos);
   };
 
@@ -28,26 +35,34 @@ const TodoList = () => {
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
             className="flex-1 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Add a todo"
+            placeholder="Add a task"
           />
           <button
             onClick={handleAddTodo}
             className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Add
+            Ajouter
           </button>
         </div>
         <ul>
           {todos.map((todo, index) => (
             <li key={index} className="py-1">
-              <div className="flex justify-between items-center bg-gray-100 rounded-md p-2 mb-2">
-                <span>{todo}</span>
-                <button
-                  onClick={() => handleDeleteTodo(index)}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                >
-                  Delete
-                </button>
+              <div className={`flex justify-between items-center bg-gray-100 rounded-md p-2 mb-2 ${todo.completed ? 'line-through' : ''}`}>
+                <span onClick={() => handleToggleComplete(index)}>{todo.task}</span>
+                <div>
+                  <button
+                    onClick={() => handleDeleteTodo(index)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
+                  >
+                    Supprimer
+                  </button>
+                  <button
+                    onClick={() => handleToggleComplete(index)}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                  >
+                    {todo.completed ? 'Rétablir' : 'Terminer'}
+                  </button>
+                </div>
               </div>
             </li>
           ))}
